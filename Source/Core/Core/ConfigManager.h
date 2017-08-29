@@ -222,6 +222,7 @@ struct SConfig
 
   std::string m_NANDPath;
   std::string m_DumpPath;
+  std::string m_LoadPath;
 
   std::string m_strMemoryCardA;
   std::string m_strMemoryCardB;

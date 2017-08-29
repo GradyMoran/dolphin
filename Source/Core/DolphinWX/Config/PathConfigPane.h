@@ -31,6 +31,7 @@ private:
   void OnDefaultISOChanged(wxCommandEvent&);
   void OnNANDRootChanged(wxCommandEvent&);
   void OnDumpPathChanged(wxCommandEvent&);
+  void OnLoadPathChanged(wxCommandEvent&);
   void OnSdCardPathChanged(wxCommandEvent&);
 
   void SaveISOPathChanges();
@@ -43,5 +44,6 @@ private:
   wxDirPickerCtrl* m_nand_root_dirpicker;
   wxFilePickerCtrl* m_default_iso_filepicker;
   wxDirPickerCtrl* m_dump_path_dirpicker;
+  wxDirPickerCtrl* m_load_path_dirpicker;
   wxFilePickerCtrl* m_wii_sdcard_filepicker;
 };

@@ -139,6 +139,9 @@ void SConfig::SaveGeneralSettings(IniFile& ini)
   general->Set("NANDRootPath", m_NANDPath);
   general->Set("DumpPath", m_DumpPath);
   CreateDumpPath(m_DumpPath);
+  general->Set("LoadPath", m_LoadPath);
+  if (!m_LoadPath.empty())
+    File::SetUserPath(D_LOAD_IDX, m_LoadPath + '/');
   general->Set("WirelessMac", m_WirelessMac);
   general->Set("WiiSDCardPath", m_strWiiSDCardPath);
 
@@ -425,6 +428,9 @@ void SConfig::LoadGeneralSettings(IniFile& ini)
   File::SetUserPath(D_WIIROOT_IDX, m_NANDPath);
   general->Get("DumpPath", &m_DumpPath);
   CreateDumpPath(m_DumpPath);
+  general->Get("LoadPath", &m_LoadPath);
+  if (!m_LoadPath.empty())
+    File::SetUserPath(D_LOAD_IDX, m_LoadPath + '/');
   general->Get("WirelessMac", &m_WirelessMac);
   general->Get("WiiSDCardPath", &m_strWiiSDCardPath, File::GetUserPath(F_WIISDCARD_IDX));
   File::SetUserPath(F_WIISDCARD_IDX, m_strWiiSDCardPath);

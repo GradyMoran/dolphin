@@ -51,6 +51,10 @@ void PathConfigPane::InitializeGUI()
   m_dump_path_dirpicker =
       new wxDirPickerCtrl(this, wxID_ANY, wxEmptyString, _("Choose a dump directory:"),
                           wxDefaultPosition, wxDefaultSize, wxDIRP_USE_TEXTCTRL | wxDIRP_SMALL);
+  m_load_path_dirpicker =
+      new wxDirPickerCtrl(this, wxID_ANY, wxEmptyString, _("Choose a load directory:"),
+                          wxDefaultPosition, wxDefaultSize, wxDIRP_USE_TEXTCTRL | wxDIRP_SMALL);
+
   m_wii_sdcard_filepicker = new wxFilePickerCtrl(
       this, wxID_ANY, wxEmptyString, _("Choose an SD Card file:"), wxFileSelectorDefaultWildcardStr,
       wxDefaultPosition, wxDefaultSize, wxDIRP_USE_TEXTCTRL | wxDIRP_SMALL);
@@ -80,9 +84,12 @@ void PathConfigPane::InitializeGUI()
   picker_sizer->Add(new wxStaticText(this, wxID_ANY, _("Dump Path:")), wxGBPosition(2, 0),
                     wxDefaultSpan, wxALIGN_CENTER_VERTICAL);
   picker_sizer->Add(m_dump_path_dirpicker, wxGBPosition(2, 1), wxDefaultSpan, wxEXPAND);
-  picker_sizer->Add(new wxStaticText(this, wxID_ANY, _("SD Card Path:")), wxGBPosition(3, 0),
+  picker_sizer->Add(new wxStaticText(this, wxID_ANY, _("Load Path:")), wxGBPosition(3, 0),
                     wxDefaultSpan, wxALIGN_CENTER_VERTICAL);
-  picker_sizer->Add(m_wii_sdcard_filepicker, wxGBPosition(3, 1), wxDefaultSpan, wxEXPAND);
+  picker_sizer->Add(m_load_path_dirpicker, wxGBPosition(3, 1), wxDefaultSpan, wxEXPAND);
+  picker_sizer->Add(new wxStaticText(this, wxID_ANY, _("SD Card Path:")), wxGBPosition(4, 0),
+                    wxDefaultSpan, wxALIGN_CENTER_VERTICAL);
+  picker_sizer->Add(m_wii_sdcard_filepicker, wxGBPosition(4, 1), wxDefaultSpan, wxEXPAND);
   picker_sizer->AddGrowableCol(1);
 
   // Populate the Paths page
@@ -104,6 +111,7 @@ void PathConfigPane::LoadGUIValues()
   m_default_iso_filepicker->SetPath(StrToWxStr(startup_params.m_strDefaultISO));
   m_nand_root_dirpicker->SetPath(StrToWxStr(SConfig::GetInstance().m_NANDPath));
   m_dump_path_dirpicker->SetPath(StrToWxStr(SConfig::GetInstance().m_DumpPath));
+  m_load_path_dirpicker->SetPath(StrToWxStr(SConfig::GetInstance().m_LoadPath));
   m_wii_sdcard_filepicker->SetPath(StrToWxStr(SConfig::GetInstance().m_strWiiSDCardPath));
 
   // Update selected ISO paths
@@ -122,6 +130,7 @@ void PathConfigPane::BindEvents()
                                  this);
   m_nand_root_dirpicker->Bind(wxEVT_DIRPICKER_CHANGED, &PathConfigPane::OnNANDRootChanged, this);
   m_dump_path_dirpicker->Bind(wxEVT_DIRPICKER_CHANGED, &PathConfigPane::OnDumpPathChanged, this);
+  m_load_path_dirpicker->Bind(wxEVT_DIRPICKER_CHANGED, &PathConfigPane::OnLoadPathChanged, this);
   m_wii_sdcard_filepicker->Bind(wxEVT_FILEPICKER_CHANGED, &PathConfigPane::OnSdCardPathChanged,
                                 this);
 
@@ -215,6 +224,14 @@ void PathConfigPane::OnDumpPathChanged(wxCommandEvent& event)
       WxStrToStr(m_dump_path_dirpicker->GetPath());
 
   m_dump_path_dirpicker->SetPath(StrToWxStr(dump_path));
+}
+
+void PathConfigPane::OnLoadPathChanged(wxCommandEvent& event)
+{
+  std::string load_path = SConfig::GetInstance().m_LoadPath =
+      WxStrToStr(m_load_path_dirpicker->GetPath());
+
+  m_load_path_dirpicker->SetPath(StrToWxStr(load_path));
 }
 
 void PathConfigPane::SaveISOPathChanges()
